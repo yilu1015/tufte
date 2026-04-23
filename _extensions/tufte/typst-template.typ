@@ -228,8 +228,8 @@
       )
       title
       set text(size: fontsize)
-      v(-0.65em)
-      subtitle
+      v(-0.2em)
+      text(style: "italic", subtitle)
     })
   }
 

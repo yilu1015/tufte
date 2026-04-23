@@ -210,7 +210,7 @@ Takes 2 optional keyword and 1 required argument:
 #let note(dy: -2em, numbered: true, content) = context {
   if numbered {
     notecounter.step()
-    text(weight: "bold", super(notecounter.display()))
+    text(super(notecounter.display()))
   }
   text(
     size: 9pt,
@@ -218,8 +218,6 @@ Takes 2 optional keyword and 1 required argument:
     margin-note(
       if numbered {
         text(
-          weight: "bold",
-          font: "serif",
           size: 11pt,
           {
             super(notecounter.display())
