@@ -41,8 +41,10 @@ This document is a skeuomorph[This document is not only a skeuomorph, but also t
 This template will function primarily as a normal Quarto template and requires no special configuration to use the basic features.
 However, to get full use of all Tufte-style features, you may find some additional features useful.
 To support this, the [(christopherkenny/typst-function)](https://github.com/christopherkenny/typst-function) filter is embedded.
-The next three subsections demonstrate how to use wideblocks, side notes, and place figures in the margin.
-Quarto does not currently support margin *figures* so a slightly modified syntax is needed to use this feature.^[[At the time of writing this](https://github.com/quarto-dev/quarto-cli/blob/fe989e5468f2a5e0545a0db441a771a74f9e3098/src/resources/filters/customnodes/floatreftarget.lua#L1002-L1006), any "margin" positions in Typst were converted to "bottom", hence the need for this approach.]
+
+The next sections demonstrate how to use wideblocks, side notes, and figures in the margin.
+
+**Note on Quarto 1.9 Marginalia:** Quarto 1.9 introduced the Marginalia package for Typst, which provides standard article layout features like `.column-margin` classes and `reference-location: margin` settings. However, this template uses its own custom sidenote implementation via the `note()` function, which is optimized for the Tufte aesthetic. These two approaches can conflict when both are enabled. This template recommends using the custom `note()` function for best results with the Tufte design. If you prefer Quarto's standard margin layout features, consider using a simpler document without this custom template.
 
 You should keep the following in the document metadata:
 
@@ -74,18 +76,27 @@ The wideblock simply is a Typst `block` but with the width parameter adjusted to
 
 ## Sidenotes
 
-In Tufte books, sidenotes[This is a sidenote; perhaps you have already noticed them in this document.]{.note} are a distinctive feature: sidenotes are used for a variety of purposes, but mainly to provide non-critical but related information. In a basic sense, they are simply footnotes but put on the side. Sidenotes appear closer to the text being referenced.
+In Tufte books, sidenotes[This is a sidenote; perhaps you have already noticed them in this document.]{.note} are a distinctive feature: they are used for a variety of purposes, but mainly to provide non-critical but related information. In a basic sense, they are simply footnotes but put on the side, appearing closer to the text being referenced.
 
-This template implements sidenotes with a Typst `#note()` function. The simplest sidenote is created with `[enter your content here]{.note}` which yields:[enter your content here]{.note}. Notice how the sidenote is automatically numbered like a footnote. This can be disabled with the `numbered: false` argument.[This sidenote is not numbered.]{.note arguments="numbered: false"}
+This template implements sidenotes with a custom Typst `#note()` function. The simplest sidenote is created with `[enter your content here]{.note}`:
 
-Sidenotes are most typically set with a span, `[text]{.note}` which is converted to Typst code for `#note()` with the `typst-function` filter.
+[This is an example sidenote]{.note}
 
-On the backend, the `note()` function uses the `drafting` package @Jessurun2023, pre-configured with some defaults. Importantly, though, the `dy` argument can still be passed to `note()` in order to adjust the vertical offset as it appears. This is helpful when many notes are included in close vicinity. Though, `drafting` package will attempt to adjust vertical positions in such cases, sometimes a manual touch is necessary.
+The sidenote is automatically numbered like a footnote. This numbering can be disabled with the `numbered: false` argument:
 
-Strictly speaking, the `note()` function can be used with content of any kind, including figures. More will be discussed on the side figure topic, so it will be left for now.
+[This sidenote is not numbered.]{.note arguments="numbered: false"}
 
-There is one other type of sidenote: the citation-sidenote. Citations here follow the standard [Quarto syntax](https://quarto.org/docs/authoring/citations.html).
-However, they are processed to be placed in the right margin.
+Sidenotes are most typically set with a span, `[text]{.note}`, which is converted to Typst code via the `typst-function` filter.
+
+The `note()` function uses the `drafting` package and supports the `dy` argument to adjust the vertical offset. This is helpful when multiple notes are positioned close together:
+
+[This note is offset down the page.]{.note arguments="dy:1em"}
+
+The `note()` function can contain any content, including figures, tables, and other formatted elements.
+
+### Citations in the Margin
+
+Citations follow the standard [Quarto citation syntax](https://quarto.org/docs/authoring/citations.html). When you create a citation, it will be included in the bibliography at the end of your document.
 
 ## Figures
 
