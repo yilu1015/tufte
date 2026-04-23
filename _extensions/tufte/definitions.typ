@@ -219,7 +219,7 @@ Takes 2 optional keyword and 1 required argument:
       if numbered {
         text(
           weight: "bold",
-          font: "Lucida Bright",
+          font: "serif",
           size: 11pt,
           {
             super(notecounter.display())

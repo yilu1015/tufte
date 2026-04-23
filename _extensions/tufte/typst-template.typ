@@ -15,9 +15,12 @@
   lang: "en",
   region: "US",
   font: (),
+  mainfont: "serif",
+  CJKmainfont: none,
   fontsize: 11pt,
   codefont: "DejaVu Sans Mono",
   sansfont: "Gill Sans MT",
+  CJKsansfont: none,
   sectionnumbering: none,
   toc: false,
   toc_title: none,
@@ -39,13 +42,26 @@
     set document(title: title)
   }
 
+  // Define body fonts with CJK fallbacks
+  let body-font = if CJKmainfont != none {
+    (mainfont, CJKmainfont)
+  } else {
+    mainfont
+  }
+
+  let body-sansfont = if CJKsansfont != none {
+    (sansfont, CJKsansfont)
+  } else {
+    sansfont
+  }
+
   // Just a suttle lightness to decrease the harsh contrast
   set text(fill: luma(30))
 
   // Tables and figures
   show figure: set figure.caption(separator: [.#h(0.5em)])
   show figure.caption: set align(left)
-  show figure.caption: set text(font: sansfont)
+  show figure.caption: set text(font: body-sansfont)
 
   show figure.where(kind: table): set figure.caption(position: top)
   show figure.where(kind: table): set figure(numbering: "I")
@@ -63,7 +79,7 @@
 
   show figure.where(kind: raw): set figure.caption(position: top)
   show figure.where(kind: raw): set figure(supplement: [Code], numbering: "1")
-  show raw: set text(font: "Lucida Console", size: 10pt)
+  show raw: set text(font: codefont, size: 10pt)
 
   // Equations
   set math.equation(numbering: "(1)")
@@ -119,7 +135,7 @@
       bottom: 1.5in,
     ),
     header: context {
-      set text(font: sansfont)
+      set text(font: body-sansfont)
       block(
         width: 100% + 3.5in - 1in,
         {
@@ -129,21 +145,21 @@
             }
             h(1fr)
             if shorttitle != none {
-              upper(shorttitle)
+              shorttitle
             } else {
-              upper(title)
+              title
             }
             if publisher != none {
               linebreak()
               h(1fr)
-              upper(publisher)
+              publisher
             }
           }
         },
       )
     },
     footer: context {
-      set text(font: sansfont, size: 8pt)
+      set text(font: body-sansfont, size: 8pt)
       block(
         width: 100% + 3.5in - 1in,
         {
@@ -176,7 +192,7 @@
               Distribution limited to #distribution.
             ]
             linebreak()
-            [Page #counter(page).display()]
+            [#counter(page).display()]
           }
         },
       )
@@ -184,7 +200,7 @@
     background: if draft {
       rotate(
         45deg,
-        text(font: sansfont, size: 200pt, fill: rgb("FFEEEE"))[DRAFT],
+        text(font: body-sansfont, size: 200pt, fill: rgb("FFEEEE"))[DRAFT],
       )
     },
   )
@@ -192,9 +208,9 @@
   set par(
     // justify: true,
     leading: 0.65em,
-    first-line-indent: 1em
+    first-line-indent: 1em,
+    spacing: 0.65em
   )
-  show par: set block(spacing: 0.65em)
 
 
   // frontmatter
@@ -203,23 +219,23 @@
       set text(
         hyphenate: false,
         size: 20pt,
-        font: sansfont,
+        font: body-sansfont,
       )
       set par(
         justify: false,
         leading: 0.2em,
         first-line-indent: 0pt,
       )
-      upper(title)
+      title
       set text(size: fontsize)
       v(-0.65em)
-      upper(subtitle)
+      subtitle
     })
   }
 
   if authors != none {
     wideblock({
-      set text(font: sansfont, size: fontsize)
+      set text(font: body-sansfont, size: fontsize)
       v(1em)
       for i in range(calc.ceil(authors.len() / 3)) {
         let end = calc.min((i + 1) * 3, authors.len())
@@ -247,19 +263,21 @@
         }
       }
     })
+    v(1em)
   }
 
   if date != none {
-    upper(date)
+    date
     linebreak()
     if document-number != none {
       document-number
     }
+    v(1em)
   }
 
   if abstract != none {
     wideblock({
-      set text(font: sansfont)
+      set text(font: body-sansfont)
       set par(hanging-indent: 3em)
       h(3em)
       abstract
@@ -269,7 +287,7 @@
   if toc {
     wideblock({
       v(1em)
-      set text(font: sansfont)
+      set text(font: body-sansfont)
       outline(indent: 1em, title: none, depth: 2)
     })
   }
@@ -283,11 +301,11 @@
     margin-left: 1.35in,
   )
 
-  // Body text
+  // Body text - fonts already defined above
   set text(
     lang: lang,
     region: region,
-    font: font,
+    font: body-font,
     style: "normal",
     weight: "regular",
     hyphenate: true,

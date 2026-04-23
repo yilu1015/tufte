@@ -53,16 +53,22 @@ $if(papersize)$
   paper: "$papersize$",
 $endif$
 $if(mainfont)$
-  font: ($for(mainfont)$"$mainfont$",$endfor$),
+  mainfont: "$mainfont$",
 $endif$
 $if(fontsize)$
   fontsize: $fontsize$,
 $endif$
 $if(codefont)$
-  codefont: ($for(codefont)$"$codefont$",$endfor$),
+  codefont: "$codefont$",
 $endif$
 $if(sansfont)$
-  sansfont: ($for(sansfont)$"$sansfont$",$endfor$),
+  sansfont: "$sansfont$",
+$endif$
+$if(CJKsansfont)$
+  CJKsansfont: "$CJKsansfont$",
+$endif$
+$if(CJKmainfont)$
+  CJKmainfont: "$CJKmainfont$",
 $endif$
 $if(section-numbering)$
   sectionnumbering: "$section-numbering$",

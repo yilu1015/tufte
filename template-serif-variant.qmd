@@ -11,17 +11,17 @@ author:
     email: "github.com/nogula"
   - name: Christopher T. Kenny
     email: "github.com/christopherkenny"
-abstract: This Quarto template adopts many aspects of the design and typography of Edward Tufte's books and extends [nogula](https://github.com/nogula)'s Typst template. The document itself demonstrates the functionality and usage of the template, including setup, sidenotes, figure display, citations, and more.
+abstract: This Quarto template adopts many aspects of the design and typography of Edward Tufte's books and extends [nogula](https://github.com/nogula)'s Typst template. This is the serif-only variant that uses the main serif font throughout instead of switching to sans-serif for headers and other elements.
 date: today
 bibliography: bibliography.bib
 format:
   tufte-typst:
     mainfont: "Garamond Premier Pro"
-    sansfont: "Gill Sans"
+    sansfont: "Garamond Premier Pro"
     codefont: "Fira Code"
     CJKmainfont: "Source Han Serif SC"
-    CJKsansfont: "Source Han Sans SC"
-    fontsize: 12pt
+    CJKsansfont: "Source Han Serif SC"
+    fontsize: 12pt    
 functions:
   - note
   - wideblock

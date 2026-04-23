@@ -21,14 +21,4 @@ contributes:
         right: 3.5in
         top: 1.5in
         bottom: 1.5in
-      mainfont:
-        - Lucida Bright
-        - New CM
-        - Linux Libertine
-      codefont:
-        - Lucida Console
-      sansfont:
-        - Gill Sans MT
-        - TeX Gyre Heros
-        - Noto Sans
       syntax-highlighting: idiomatic
