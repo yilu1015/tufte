@@ -215,7 +215,7 @@
     // justify: true,
     leading: 0.65em,
     first-line-indent: 1em,
-    spacing: 0.65em
+    spacing: 1.5em
   )
 
 
