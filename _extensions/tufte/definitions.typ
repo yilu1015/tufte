@@ -203,15 +203,10 @@ $if(margin-geometry)$
 // takes precedence for all #wideblock() calls in the document.
 #import "@preview/marginalia:0.3.1" as marginalia: note, notefigure
 
-// State variable: true while content inside a document-level wideblock is laid out.
-// The figure show rule reads this to skip redundant v() calls when the wideblock
-// already supplies external vertical spacing.
-#let _in_wideblock = state("_in_wideblock", false)
-
 // Shadow marginalia.wideblock.
-// - Document-level calls (Quarto-generated .column-page-right divs): adds v(2em)/
-//   v(1.5em) around the wideblock and gates _in_wideblock so figures inside skip
-//   their own v() to avoid double-spacing.
+// - Document-level calls (Quarto-generated .column-page-right divs): adds external
+//   v(2em)/v(1.5em) around the wideblock.  Inside the wideblock, the figure show
+//   rule is overridden to an identity transform so external spacing isn't doubled.
 // - Template-internal calls (title, abstract, …): pass _template: true to omit
 //   the extra spacing (those blocks manage their own vertical rhythm manually).
 #let wideblock(side: auto, _template: false, body) = {
@@ -219,20 +214,12 @@ $if(margin-geometry)$
     marginalia.wideblock(side: side, body)
   } else {
     v(2em, weak: true)
-    _in_wideblock.update(true)
-    marginalia.wideblock(side: side, body)
-    _in_wideblock.update(false)
-    v(1.5em, weak: true)
-  }
-}
-
-// Helper called by the figure show rule: add v() only when NOT inside a wideblock.
-#let _figure_with_spacing(in_wb, it) = {
-  if in_wb {
-    it
-  } else {
-    v(2em, weak: true)
-    it
+    marginalia.wideblock(side: side, {
+      // Suppress the outer figure show rule inside the wideblock; the external
+      // v() above/below is sufficient and avoids double-spacing.
+      show figure: it => it
+      body
+    })
     v(1.5em, weak: true)
   }
 }

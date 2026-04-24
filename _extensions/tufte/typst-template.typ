@@ -62,10 +62,14 @@
   show figure.caption: set text(font: body-sansfont)
 
   // Breathing room around all floats.
-  // Plain figures: v() is placed directly in the document flow.
-  // Wideblock figures: the wideblock itself provides external v(2em)/v(1.5em);
-  //   the show rule skips its own v() (via _in_wideblock state) to avoid double-spacing.
-  show figure: it => context _figure_with_spacing(_in_wideblock.get(), it)
+  // Plain figures: v() is placed in the document flow by this show rule.
+  // Wideblock figures: the wideblock wrapper provides external v(); its inner
+  //   show rule overrides this one to identity to avoid double-spacing.
+  show figure: it => {
+    v(2em, weak: true)
+    it
+    v(1.5em, weak: true)
+  }
 
   show figure.where(kind: table): set figure.caption(position: top)
   show figure.where(kind: table): set figure(numbering: "I")
@@ -215,7 +219,7 @@
     // justify: true,
     leading: 0.65em,
     first-line-indent: 1em,
-    spacing: 1.5em
+    spacing: 0.65em
   )
 
 
