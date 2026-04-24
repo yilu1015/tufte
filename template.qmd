@@ -14,16 +14,7 @@ author:
 abstract: This Quarto template adopts many aspects of the design and typography of Edward Tufte's books and extends [nogula](https://github.com/nogula)'s Typst template. The document itself demonstrates the functionality and usage of the template, including setup, sidenotes, figure display, citations, and more.
 date: today
 bibliography: bibliography.bib
-format:
-  tufte-typst:
-    mainfont: "Garamond Premier Pro"
-    sansfont: "Gill Sans"
-    codefont: "Fira Code"
-    CJKmainfont: "Source Han Serif SC"
-    CJKsansfont: "Source Han Sans SC"
-    fontsize: 12pt
-reference-location: margin
-citation-location: margin
+format: tufte-typst
 ---
 
 # Introduction

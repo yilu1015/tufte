@@ -182,7 +182,7 @@
               Distribution limited to #distribution.
             ]
             linebreak()
-            [#counter(page).display()]
+            [#h(1fr)#counter(page).display()]
           } else {
             if type(footer-content) == array {
               footer-content.at(1)
@@ -198,7 +198,7 @@
               Distribution limited to #distribution.
             ]
             linebreak()
-            [#counter(page).display()]
+            [#h(1fr)#counter(page).display()]
           }
         },
       )

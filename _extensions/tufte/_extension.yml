@@ -15,20 +15,26 @@ contributes:
       date: last-modified
       date-format: "MMMM DD, YYYY"
       margin:
-        left: 1in
+        left: 0.75in
         top: 1.5in
         bottom: 1.5in
       grid:
-        margin-width: 2.75in
+        margin-width: 2.25in
         gutter-width: 0.25in
       margin-geometry:
         inner:
           far: 0pt
           width: 0pt
-          separation: 1in
+          separation: 0.75in
         outer:
-          far: 0.5in
+          far: 0.75in
       reference-location: margin
       citation-location: margin
       fig-cap-location: margin
       syntax-highlighting: idiomatic
+      mainfont: "Garamond Premier Pro"
+      sansfont: "Garamond Premier Pro"
+      codefont: "Fira Code"
+      CJKmainfont: "Source Han Serif SC"
+      CJKsansfont: "Source Han Serif SC"
+      fontsize: 12pt    
