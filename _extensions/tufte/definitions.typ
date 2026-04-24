@@ -1,5 +1,3 @@
-#import "@preview/drafting:0.2.2": *
-
 #let to-string(content) = {
   if content.has("text") {
     content.text
@@ -199,64 +197,58 @@ $else$
   #let sansfont = "Gill Sans MT"
 $endif$
 
-/* Sidenotes
-Display content in the right margin with the `note()` function.
-Takes 2 optional keyword and 1 required argument:
-  - `dy: length` Adjust the vertical position as required (default `0pt`).
-  - `numbered: bool` Display a footnote-style number in text and in the note (default `true`).
-  - `content: content` The content of the note.
-*/
-#let notecounter = counter("notecounter")
-#let note(dy: -2em, numbered: true, content) = context {
-  if numbered {
-    notecounter.step()
-    text(super(notecounter.display()))
+$if(margin-geometry)$
+// Margin layout support using marginalia package.
+// wideblock is intentionally NOT in the named imports so our custom wrapper below
+// takes precedence for all #wideblock() calls in the document.
+#import "@preview/marginalia:0.3.1" as marginalia: note, notefigure
+
+// State variable: true while content inside a document-level wideblock is laid out.
+// The figure show rule reads this to skip redundant v() calls when the wideblock
+// already supplies external vertical spacing.
+#let _in_wideblock = state("_in_wideblock", false)
+
+// Shadow marginalia.wideblock.
+// - Document-level calls (Quarto-generated .column-page-right divs): adds v(2em)/
+//   v(1.5em) around the wideblock and gates _in_wideblock so figures inside skip
+//   their own v() to avoid double-spacing.
+// - Template-internal calls (title, abstract, …): pass _template: true to omit
+//   the extra spacing (those blocks manage their own vertical rhythm manually).
+#let wideblock(side: auto, _template: false, body) = {
+  if _template {
+    marginalia.wideblock(side: side, body)
+  } else {
+    v(2em, weak: true)
+    _in_wideblock.update(true)
+    marginalia.wideblock(side: side, body)
+    _in_wideblock.update(false)
+    v(1.5em, weak: true)
   }
-  text(
-    size: 9pt,
-    font: sansfont,
-    margin-note(
-      if numbered {
-        text(
-          size: 11pt,
-          {
-            super(notecounter.display())
-            text(size: 9pt, " ")
-          },
-        )
-        content
-      } else {
-        content
-      },
-      dy: dy,
-    ),
-  )
 }
 
-/* Sidenote citation
-Display a short citation in the right margin with the `notecite()` function.
-Takes 2 optional keyword and 1 required argument.
-  - `dy: length` Adjust the vertical position as required (default `0pt`).
-  - `supplement: content` Supplement for the in-text citation (e.g., `p.~7`), (default `none`).
-  - `key: label` The bibliography entry's label.
-
-CAUTION: if no bibliography is defined, then this function will not display anything.
-*/
-#let notecite(dy: -2em, supplement: none, key) = (
-  context {
-    let elems = query(bibliography)
-    if elems.len() > 0 {
-      if type(key) == label {
-        cite(key)
-      } else {
-      let (key, supplement, form, style) = key.fields()
-      cite(key, supplement: supplement, style: "ieee")
-      note(
-        cite(key, form: "full", style: "short_ref.csl"),
-        dy: dy,
-        numbered: false,
-      )
-      }
-    }
+// Helper called by the figure show rule: add v() only when NOT inside a wideblock.
+#let _figure_with_spacing(in_wb, it) = {
+  if in_wb {
+    it
+  } else {
+    v(2em, weak: true)
+    it
+    v(1.5em, weak: true)
   }
-)
+}
+
+// Render footnote as margin note using standard footnote counter
+#let column-sidenote(body) = {
+  context {
+    let num = counter(footnote).display("1")
+    super(num)
+    note(
+      alignment: "baseline",
+      shift: auto,
+      counter: none,
+    )[
+      #super(num) #body
+    ]
+  }
+}
+$endif$
