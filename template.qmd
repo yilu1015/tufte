@@ -22,9 +22,8 @@ format:
     CJKmainfont: "Source Han Serif SC"
     CJKsansfont: "Source Han Sans SC"
     fontsize: 12pt
-functions:
-  - note
-  - wideblock
+reference-location: margin
+citation-location: margin
 ---
 
 # Introduction
@@ -33,37 +32,34 @@ Edward Tufte is an American statistician, professor, and pioneer in the field of
 
 This template adopts many of the conventions used by Gralla and Tufte and allows the interested author to obtain a similar appearance to style of Tufte's publications. However, the design adapts the book-format to work as an article (i.e., not having multiple parts and chapters and so forth, but instead something more akin to a memo or academic journal article).
 
-This document is a skeuomorph[This document is not only a skeuomorph, but also tests the template itself.]{.note} of the template; it intends to demonstrate the template's functionality across various frontmatter styles, citations, figures, and importantly, sidenotes.
+This document is a skeuomorph^[This document is not only a skeuomorph, but also tests the template itself.] of the template; it intends to demonstrate the template's functionality across various frontmatter styles, citations, figures, and importantly, sidenotes.
 
 
 # Using this template
 
 This template will function primarily as a normal Quarto template and requires no special configuration to use the basic features.
-However, to get full use of all Tufte-style features, you may find some additional features useful.
-To support this, the [(christopherkenny/typst-function)](https://github.com/christopherkenny/typst-function) filter is embedded.
+However, to get full use of all Tufte-style features, you may find some additional options useful.
+This template uses Quarto 1.9's native article layout support via the Marginalia package, which provides standard margin layout features.
 
-The next sections demonstrate how to use wideblocks, side notes, and figures in the margin.
+The next sections demonstrate how to use wide blocks, side notes, and figures in the margin.
 
-**Note on Quarto 1.9 Marginalia:** Quarto 1.9 introduced the Marginalia package for Typst, which provides standard article layout features like `.column-margin` classes and `reference-location: margin` settings. However, this template uses its own custom sidenote implementation via the `note()` function, which is optimized for the Tufte aesthetic. These two approaches can conflict when both are enabled. This template recommends using the custom `note()` function for best results with the Tufte design. If you prefer Quarto's standard margin layout features, consider using a simpler document without this custom template.
+This template requires Quarto 1.9 or later. Add the following to your document metadata to enable Tufte-style margin features:
 
-You should keep the following in the document metadata:
-
-```
-functions:
-  - note
-  - wideblock
+```yaml
+reference-location: margin
+citation-location: margin
 ```
 
-You are welcome to add to this, but removing these will limit your ability to use wideblocks (full width elements) and note (margin-only elements).
+With these options set, footnotes become numbered sidenotes and citations appear alongside their references in the right margin.
 
-## Wideblocks
+## Wide Blocks
 
-::: {.wideblock}
+::: {.column-page-right}
 
-You may have noticed that this text spans the entire width of the page whereas the preceeding two pages were compressed to a four-inch-wide column in the typical manner of Tufte books. The template makes permissible the ability to break the narrow column format when desired by using a Typst-based `#wideblock()` function, which takes a single required argument representing the content to be displayed. The simplest way to use the wideblock is by using a div:
+You may have noticed that this text spans the entire width of the page whereas the preceding two pages were compressed to a four-inch-wide column in the typical manner of Tufte books. The template allows you to break the narrow column format when desired by using Quarto's native `.column-page-right` class, which extends content to span both the body and the right margin. The simplest way to use it is with a div:
 
 ```md
-::: {.wideblock}
+::: {.column-page-right}
 
 your content
 
@@ -72,31 +68,41 @@ your content
 
 :::
 
-The wideblock simply is a Typst `block` but with the width parameter adjusted to make the block 6.5 inches wide. This can be useful when a full page does not contain any sidenotes and otherwise the text would look somewhat awkward being unnecessarily compressed into a narrow column.
+The `.column-page-right` class spans body and margin combined, which can be useful when a full page does not contain any sidenotes and the text would otherwise look awkward being unnecessarily compressed into a narrow column.
 
 ## Sidenotes
 
-In Tufte books, sidenotes[This is a sidenote; perhaps you have already noticed them in this document.]{.note} are a distinctive feature: they are used for a variety of purposes, but mainly to provide non-critical but related information. In a basic sense, they are simply footnotes but put on the side, appearing closer to the text being referenced.
+In Tufte books, sidenotes^[This is a sidenote; perhaps you have already noticed them in this document.] are a distinctive feature: they are used for a variety of purposes, but mainly to provide non-critical but related information. In a basic sense, they are simply footnotes but put on the side, appearing closer to the text being referenced.
 
-This template implements sidenotes with a custom Typst `#note()` function. The simplest sidenote is created with `[enter your content here]{.note}`:
+With `reference-location: margin` set in the document metadata, standard Quarto footnotes are automatically rendered as numbered sidenotes in the right margin. Create a sidenote using standard footnote syntax:
 
-[This is an example sidenote]{.note}
+```md
+Text with a sidenote^[The sidenote content appears in the margin].
+```
 
-The sidenote is automatically numbered like a footnote. This numbering can be disabled with the `numbered: false` argument:
+Here is a sentence with an example sidenote^[This is an example sidenote].
 
-[This sidenote is not numbered.]{.note arguments="numbered: false"}
+To place content in the margin without a footnote number, use the `.aside` class:
 
-Sidenotes are most typically set with a span, `[text]{.note}`, which is converted to Typst code via the `typst-function` filter.
+```md
+[Content for the margin without a number.]{.aside}
+```
 
-The `note()` function uses the `drafting` package and supports the `dy` argument to adjust the vertical offset. This is helpful when multiple notes are positioned close together:
+[This sidenote has no number.]{.aside}
 
-[This note is offset down the page.]{.note arguments="dy:1em"}
+The `.column-margin` class works the same way for block-level content:
 
-The `note()` function can contain any content, including figures, tables, and other formatted elements.
+```md
+::: {.column-margin}
+Content placed in the margin.
+:::
+```
+
+The sidenote can contain any content, including figures, tables, and other formatted elements.
 
 ### Citations in the Margin
 
-Citations follow the standard [Quarto citation syntax](https://quarto.org/docs/authoring/citations.html). When you create a citation, it will be included in the bibliography at the end of your document.
+Citations follow the standard [Quarto citation syntax](https://quarto.org/docs/authoring/citations.html). With `citation-location: margin` set in the document metadata, cited sources are automatically displayed in the right margin alongside the text that references them.
 
 ## Figures
 
@@ -113,9 +119,9 @@ This is just a plain figure.
 
 :::
 
-Second, a `wideblock()` can be used to display a larger (or, at least wider) figure in the text, which spans 6.5 inches rather than four. This is demonstrated with @fig-wide.
+Second, a `.column-page-right` div can be used to display a larger (or, at least wider) figure in the text, which spans the full body and margin width. This is demonstrated with @fig-wide.
 
-::: {.wideblock}
+::: {.column-page-right}
 
 ::: {#fig-wide}
 
@@ -130,17 +136,16 @@ The widest figure you've ever seen!
 
 Note that this figure also demonstrates the ability to place raw Typst blocks within figures. You can mix and match as you see fit, but I strongly recommend using the basic figure formatting from Quarto, otherwise you may need to manually control figure kinds and their respective counters. In general, if you use Quarto syntax where possible and only resort to raw Typst at the last moment (like above using `#rect` only after setting up the figure), things should work.
 
-Third, you can also display figures in the margin.
+Third, you can also display figures in the margin using the `.column-margin` class.
 @fig-side-figure demonstrates this.
-You can adjust their location using the `dy` argument to `note()`. You can use any [Typst length](https://typst.app/docs/reference/layout/length/), inlcuding inches ("in") or centimeters ("cm"). This note is moved 1.2 inches down on the page.
 
-::: {.note arguments="dy:-1.2in, numbered:false"}
+::: {.column-margin}
 
 ::: {#fig-side-figure}
 
 {{< placeholder 200 200 format=svg >}}
 
-This is a little figure in the sidenotes.
+This is a little figure in the margin.
 
 :::
 
@@ -157,8 +162,8 @@ To start a bibliography on a new page, it is recommended to use the [`{{{< pageb
 # Epilogue
 
 #### [nogula](https://github.com/nogula)'s original thanks
-Thank you to Edward Tufte for inspiring this template, and to other Typst contributes, particularly Nathan Jessurun for `drafting`.
+Thank you to Edward Tufte for inspiring this template, and to other Typst contributors.
 
 #### [christopherkenny](https://github.com/christopherkenny)'s thanks
 
-Thank you to nogula for building the Typst template from which this Quarto template is built.
+Thank you to nogula for building the Typst template from which this Quarto template is built, and to the Quarto team for Quarto 1.9's native Marginalia support that powers the sidenotes and column layout in this template.

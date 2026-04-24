@@ -61,11 +61,15 @@
   show figure.caption: set align(left)
   show figure.caption: set text(font: body-sansfont)
 
-  // Breathing room around all floats.
-  // Plain figures: v() is placed directly in the document flow.
-  // Wideblock figures: the wideblock itself provides external v(2em)/v(1.5em);
-  //   the show rule skips its own v() (via _in_wideblock state) to avoid double-spacing.
-  show figure: it => context _figure_with_spacing(_in_wideblock.get(), it)
+  // Breathing room around all floats. Using v() rather than set block(above/below)
+  // so the space injects directly into the vertical flow even when the figure is
+  // inside a wideblock (which uses negative padding, not a block wrapper).
+  // weak: true prevents double-spacing next to headings or page breaks.
+  show figure: it => {
+    v(2em, weak: true)
+    it
+    v(1.5em, weak: true)
+  }
 
   show figure.where(kind: table): set figure.caption(position: top)
   show figure.where(kind: table): set figure(numbering: "I")
@@ -107,19 +111,19 @@
   set heading(numbering: none)
   show heading.where(level: 1): it => {
     v(2em, weak: true)
-    text(size: 14pt, weight: "bold", font: body-sansfont, it)
+    text(size: 14pt, weight: "bold", it)
     v(1em, weak: true)
   }
 
   show heading.where(level: 2): it => {
     v(1.3em, weak: true)
-    text(size: 13pt, weight: "regular", style: "italic", font: body-sansfont, it)
+    text(size: 13pt, weight: "regular", style: "italic", it)
     v(1em, weak: true)
   }
 
   show heading.where(level: 3): it => {
     v(1em, weak: true)
-    text(size: fontsize, style: "italic", weight: "light", font: body-sansfont, it)
+    text(size: fontsize, style: "italic", weight: "thin", it)
     v(0.65em, weak: true)
   }
 
@@ -221,7 +225,7 @@
 
   // frontmatter
   if title != none {
-    wideblock(_template: true, {
+    wideblock({
       set text(
         hyphenate: false,
         size: 20pt,
@@ -240,7 +244,7 @@
   }
 
   if authors != none {
-    wideblock(_template: true, {
+    wideblock({
       set text(font: body-sansfont, size: fontsize)
       v(1em)
       for i in range(calc.ceil(authors.len() / 3)) {
@@ -273,7 +277,6 @@
   }
 
   if date != none {
-    set text(font: body-sansfont)
     date
     linebreak()
     if document-number != none {
@@ -283,7 +286,7 @@
   }
 
   if abstract != none {
-    wideblock(_template: true, {
+    wideblock({
       set text(font: body-sansfont)
       set par(hanging-indent: 3em)
       h(3em)
@@ -292,7 +295,7 @@
   }
 
   if toc {
-    wideblock(_template: true, {
+    wideblock({
       v(1em)
       set text(font: body-sansfont)
       outline(indent: 1em, title: none, depth: 2)
