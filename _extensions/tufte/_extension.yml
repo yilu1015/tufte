@@ -1,6 +1,6 @@
 title: tufte
-author: Christopher T. Kenny
-version: 1.1.0
+author: Yi Lu
+version: 1.0.0
 quarto-required: ">=1.9.0"
 contributes:
   formats:
@@ -28,4 +28,7 @@ contributes:
           separation: 1in
         outer:
           far: 0.5in
+      reference-location: margin
+      citation-location: margin
+      fig-cap-location: margin
       syntax-highlighting: idiomatic
