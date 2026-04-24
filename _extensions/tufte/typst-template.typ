@@ -285,9 +285,11 @@
   if abstract != none {
     wideblock(_template: true, {
       set text(font: body-sansfont)
-      set par(hanging-indent: 3em)
-      h(3em)
-      abstract
+      // Each paragraph gets a 3em left indent. Uses first-line-indent so that
+      // every paragraph (not just the first) is uniformly indented, matching
+      // the pull-quote style across multi-paragraph abstracts.
+      set par(first-line-indent: 0pt, hanging-indent: 0pt)
+      pad(left: 3em, abstract)
     })
   }
 
