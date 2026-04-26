@@ -199,9 +199,31 @@ $endif$
 
 $if(margin-geometry)$
 // Margin layout support using marginalia package.
-// wideblock is intentionally NOT in the named imports so our custom wrapper below
-// takes precedence for all #wideblock() calls in the document.
-#import "@preview/marginalia:0.3.1" as marginalia: note, notefigure
+// wideblock and note are intentionally NOT in the named imports — our custom
+// wrappers below take precedence for all calls in the document.
+// notefigure IS imported directly; we handle its spacing via show rules below.
+#import "@preview/marginalia:0.3.1" as marginalia: notefigure
+
+// Shadow marginalia.note: override the default par-style to force ragged-right
+// text inside all margin notes (narrow column width makes justification look poor).
+#let note(
+  par-style: (spacing: 1.2em, leading: 0.5em, hanging-indent: 0pt, justify: false),
+  ..args
+) = {
+  marginalia.note(par-style: par-style, ..args)
+}
+
+// Prevent notefigure's two internal [#metadata(...)] block anchors from creating
+// extra par.spacing in the body column when notefigure is called between
+// blank-line-separated paragraphs (which puts it in block context).
+// Converting them to zero-size blocks with explicit above/below: 0pt removes
+// their layout contribution while keeping them visible to marginalia's queries.
+#show <_marginalia_notefigure>: it => block(
+  width: 0pt, height: 0pt, above: 0pt, below: 0pt, it
+)
+#show <_marginalia_notefigure_meta>: it => block(
+  width: 0pt, height: 0pt, above: 0pt, below: 0pt, it
+)
 
 // Shadow marginalia.wideblock.
 // - Document-level calls (Quarto-generated .column-page-right divs): adds external

@@ -29,7 +29,7 @@ contributes:
         outer:
           far: 0.75in
       reference-location: margin
-      citation-location: margin
+      citation-location: document
       fig-cap-location: margin
       syntax-highlighting: idiomatic
       mainfont: "Garamond Premier Pro"

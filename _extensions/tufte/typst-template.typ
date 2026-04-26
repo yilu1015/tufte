@@ -56,6 +56,12 @@
   // Just a suttle lightness to decrease the harsh contrast
   set text(fill: luma(30))
 
+  // CJK glyphs have a larger optical size than Latin at the same pt value;
+  // render them 1pt smaller to visually equalize their weight.
+  if CJKmainfont != none {
+    show regex("[一-鿿㐀-䶿]"):  it => text(size: fontsize - 1pt, it)
+  }
+
   // Tables and figures
   show figure: set figure.caption(separator: [.#h(0.5em)])
   show figure.caption: set align(left)
@@ -216,7 +222,7 @@
   )
 
   set par(
-    // justify: true,
+    justify: true,
     leading: 0.65em,
     first-line-indent: 1em,
     spacing: 0.65em
