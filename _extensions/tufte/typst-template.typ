@@ -118,13 +118,13 @@
   show heading.where(level: 1): it => {
     v(2em, weak: true)
     text(size: 14pt, weight: "bold", font: body-sansfont, it)
-    v(1em, weak: true)
+    v(0.65em, weak: true)
   }
 
   show heading.where(level: 2): it => {
     v(1.3em, weak: true)
     text(size: 13pt, weight: "regular", style: "italic", font: body-sansfont, it)
-    v(1em, weak: true)
+    v(0.65em, weak: true)
   }
 
   show heading.where(level: 3): it => {

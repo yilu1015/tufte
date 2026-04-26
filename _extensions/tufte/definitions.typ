@@ -225,7 +225,13 @@ $if(margin-geometry)$
 )
 #show <_marginalia_notefigure_meta>: it => {
   block(width: 0pt, height: 0pt, above: 0pt, below: 0pt, it)
-  v(0.65em, weak: true)
+  // Emit a zero-size paragraph instead of v() so the next real paragraph is
+  // "not first after a block" and therefore receives first-line-indent.
+  // Par.spacing (0.65em) before the next real paragraph provides the correct gap.
+  {
+    set text(size: 0pt)
+    par[#h(0pt)]
+  }
 }
 
 // Shadow marginalia.wideblock.
