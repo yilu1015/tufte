@@ -218,12 +218,15 @@ $if(margin-geometry)$
 // blank-line-separated paragraphs (which puts it in block context).
 // Converting them to zero-size blocks with explicit above/below: 0pt removes
 // their layout contribution while keeping them visible to marginalia's queries.
+// The _meta anchor (last element emitted) gets a v(0.65em, weak: true) so the
+// two surrounding body paragraphs still have one normal paragraph gap between them.
 #show <_marginalia_notefigure>: it => block(
   width: 0pt, height: 0pt, above: 0pt, below: 0pt, it
 )
-#show <_marginalia_notefigure_meta>: it => block(
-  width: 0pt, height: 0pt, above: 0pt, below: 0pt, it
-)
+#show <_marginalia_notefigure_meta>: it => {
+  block(width: 0pt, height: 0pt, above: 0pt, below: 0pt, it)
+  v(0.65em, weak: true)
+}
 
 // Shadow marginalia.wideblock.
 // - Document-level calls (Quarto-generated .column-page-right divs): adds external
