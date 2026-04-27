@@ -33,7 +33,11 @@ $else$
 #show footnote.entry: it => it
 #heading(level:1, [References])
 #show bibliography: set text(font: sansfont)
-#show bibliography: set par(justify: false)
+#show bibliography: set par(
+  justify: false,
+  hanging-indent: 1em,
+  first-line-indent: 0pt,
+)
 #set bibliography(title: none)
 $if(bibliography)$
 #bibliography($for(bibliography)$"$bibliography$"$sep$,$endfor$)
