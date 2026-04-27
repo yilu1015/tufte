@@ -62,6 +62,15 @@
     show regex("[一-鿿㐀-䶿]"):  it => text(size: fontsize - 1pt, it)
   }
 
+  // When citation-location: document, pandoc's citeproc embeds the bibliography
+  // as #block[...] <refs> in the document body. Target it by label so the
+  // hanging-indent rule is defined before the body content (biblio.typ is too late).
+  show <refs>: it => {
+    set par(hanging-indent: 1em, first-line-indent: 0pt, justify: false)
+    set text(font: body-sansfont)
+    it
+  }
+
   // Tables and figures
   show figure: set figure.caption(separator: [.#h(0.5em)])
   show figure.caption: set align(left)

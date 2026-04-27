@@ -206,11 +206,21 @@ $if(margin-geometry)$
 
 // Shadow marginalia.note: override the default par-style to force ragged-right
 // text inside all margin notes (narrow column width makes justification look poor).
+//
+// When Quarto places figure captions in the margin (fig-cap-location: margin) it
+// generates: note(..., keep-order: true)[#text(size: 0.9em)[caption]]
+// The 0.9em is relative to marginalia's default text-style size (9.35pt), yielding
+// ~8.4pt — visibly smaller than regular sidenotes at 9.35pt.  We detect the
+// figure-caption call site via keep-order: true and raise the em base to
+// 9.35pt/0.9 ≈ 10.39pt, so that the 0.9em wrapper resolves back to 9.35pt.
 #let note(
   par-style: (spacing: 1.2em, leading: 0.5em, hanging-indent: 0pt, justify: false),
+  keep-order: false,
   ..args
 ) = {
-  marginalia.note(par-style: par-style, ..args)
+  let body = args.pos().first()
+  let fixed = if keep-order { { set text(size: 9.35pt / 0.9); body } } else { body }
+  marginalia.note(par-style: par-style, keep-order: keep-order, ..args.named(), fixed)
 }
 
 // Prevent notefigure's two internal [#metadata(...)] block anchors from creating

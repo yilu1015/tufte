@@ -2,15 +2,7 @@
 
 $if(citations)$
 $if(citeproc)$
-$-- citeproc: pandoc embeds the formatted bibliography in the body; style it here. --$
-// The pandoc-generated bibliography is a #block[...] <refs> at the very end.
-// Apply hanging indent and ragged-right to all block content from here onward.
-#show block: set par(
-  hanging-indent: 1em,
-  first-line-indent: 0pt,
-  justify: false,
-)
-#show block: set text(font: sansfont)
+$-- citeproc: bibliography styled via show <refs> in typst-template.typ --$
 $else$
 $if(csl)$
 #set bibliography(style: "$csl$")
@@ -32,12 +24,14 @@ $else$
 #show footnote: it => it
 #show footnote.entry: it => it
 #heading(level:1, [References])
-#show bibliography: set text(font: sansfont)
-#show bibliography: set par(
+// set par at document scope (not inside a show rule) so it reliably propagates
+// into Typst's bibliography entry renderer.
+#set par(
   justify: false,
   hanging-indent: 1em,
   first-line-indent: 0pt,
 )
+#show bibliography: set text(font: sansfont)
 #set bibliography(title: none)
 $if(bibliography)$
 #bibliography($for(bibliography)$"$bibliography$"$sep$,$endfor$)
